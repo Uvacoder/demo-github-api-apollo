@@ -1,29 +1,26 @@
 import React from 'react';
-import { gql, useQuery } from '@apollo/client';
+// import { gql, useQuery } from '@apollo/client';
+import UserSchema from './UserSchema';
 
-const USER_SCHEMA = gql`
-  query GetUserSchema {
-    __type(name: "User") {
-      name
-      kind
-      description
-      fields {
-        name
-      }
-    }
-  }
-`;
+const handleSubmit = (event) => {
+  event.preventDefault();
+
+  console.log('you submitted the form!');
+};
 
 const App = () => {
-  const { loading, error, data } = useQuery(USER_SCHEMA);
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>ERROR</p>;
-
   return (
     <>
-      <h1>Hello world!</h1>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+      <h1>GitHub User Search</h1>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="user-search">
+          Username
+          <input type="text" name="user-search" id="user-search" />
+        </label>
+        <button type="submit">Search</button>
+      </form>
+      <hr />
+      <UserSchema />
     </>
   );
 };

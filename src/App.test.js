@@ -4,12 +4,12 @@ import { ApolloProvider } from '@apollo/client';
 import client from './apolloClient';
 import App from './App';
 
-test('says hello world', async () => {
+test('syays GitHub User Search', async () => {
   const { findByText } = render(
     <ApolloProvider client={client}>
       <App />
     </ApolloProvider>
   );
-  const helloElement = await findByText(/hello world/i);
-  expect(helloElement).toBeInTheDocument();
+  const titleElement = await findByText(/github user search/i);
+  expect(titleElement).toBeInTheDocument();
 });
