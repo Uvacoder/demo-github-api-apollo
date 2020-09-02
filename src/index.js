@@ -32,18 +32,17 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
+// Spit out User GraphQL schema
 client
   .query({
     query: gql`
-      query GetTypes {
-        __schema {
-          types {
+      query {
+        __type(name: "User") {
+          name
+          kind
+          description
+          fields {
             name
-            kind
-            description
-            fields {
-              name
-            }
           }
         }
       }
