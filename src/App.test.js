@@ -4,7 +4,7 @@ import { ApolloProvider } from '@apollo/client';
 import client from './apolloClient';
 import App from './App';
 
-test('syays GitHub User Search', async () => {
+test('says GitHub User Search', async () => {
   const { findByText } = render(
     <ApolloProvider client={client}>
       <App />
