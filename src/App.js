@@ -45,7 +45,9 @@ const App = () => {
     if (data) {
       console.log('got API data:', data);
       setUserCount(data.search.userCount);
-      setUsersPage(data.search.edges);
+      setUsersPage(
+        data.search.edges.filter((edge) => edge.node.__typename === 'User')
+      );
     }
   }, [loading, data]);
 
