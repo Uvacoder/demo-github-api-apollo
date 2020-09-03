@@ -10,6 +10,7 @@ const USERS = gql`
       edges {
         node {
           ... on User {
+            id
             login
             name
             avatarUrl
@@ -71,9 +72,15 @@ const App = () => {
           )}
           {usersPage.length ? (
             <ul>
-              {usersPage.map((user, i) => (
-                <li key={i}>
-                  <pre>{JSON.stringify(user, null, 2)}</pre>
+              {usersPage.map((user) => (
+                <li key={user.node.id}>
+                  <a
+                    href={`https://api.github.com/search/users?q=user:${user.node.login}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <pre>{JSON.stringify(user, null, 2)}</pre>
+                  </a>
                 </li>
               ))}
             </ul>
