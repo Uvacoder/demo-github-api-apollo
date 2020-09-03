@@ -15,6 +15,20 @@ const USERS = gql`
             name
             avatarUrl
             bio
+            status {
+              message
+            }
+            location
+            starredRepositories {
+              totalCount
+            }
+            followers {
+              totalCount
+            }
+            following {
+              totalCount
+            }
+            createdAt
           }
         }
       }
@@ -74,13 +88,7 @@ const App = () => {
             <ul>
               {usersPage.map((user) => (
                 <li key={user.node.id}>
-                  <a
-                    href={`https://api.github.com/search/users?q=user:${user.node.login}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <pre>{JSON.stringify(user, null, 2)}</pre>
-                  </a>
+                  <UserListing {...user.node} />
                 </li>
               ))}
             </ul>
@@ -92,5 +100,43 @@ const App = () => {
     </>
   );
 };
+
+const UserListing = ({
+  login,
+  name,
+  avatarUrl,
+  bio,
+  status,
+  location,
+  starredRepositories,
+  followers,
+  following,
+  createdAt,
+}) => (
+  <a
+    href={`https://api.github.com/search/users?q=user:${login}`}
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <h2>{login}</h2>
+    <h3>{name}</h3>
+    <img src={avatarUrl} alt={`${login}'s avatar`} />
+    <p>{status?.message}</p>
+    <p>{bio}</p>
+    <ul>
+      <li>{followers.totalCount} followers</li>
+      <li>{following.totalCount} following</li>
+      <li>{starredRepositories.totalCount} stars</li>
+      <li>Location: {location}</li>
+      <li>
+        Joined{' '}
+        {new Date(createdAt).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+        })}
+      </li>
+    </ul>
+  </a>
+);
 
 export default App;
