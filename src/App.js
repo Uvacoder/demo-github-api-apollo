@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { gql, useLazyQuery } from '@apollo/client';
-// import UserSchema from './UserSchema';
 
 // TODO Modify search params for pagination
 const USERS = gql`
@@ -95,8 +94,6 @@ const App = () => {
           ) : null}
         </>
       )}
-      {/* <hr />
-      <UserSchema /> */}
     </>
   );
 };
