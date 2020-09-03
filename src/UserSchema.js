@@ -17,8 +17,8 @@ const USER_SCHEMA = gql`
 const UserSchema = () => {
   const { loading, error, data } = useQuery(USER_SCHEMA);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>ERROR</p>;
+  if (loading) return <p>Loading User schema...</p>;
+  if (error) return <p>Error getting User schema</p>;
 
   return <pre>{JSON.stringify(data, null, 2)}</pre>;
 };
