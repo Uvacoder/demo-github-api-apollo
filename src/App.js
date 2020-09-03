@@ -2,34 +2,43 @@ import React, { useState, useEffect } from 'react';
 import { gql, useLazyQuery } from '@apollo/client';
 // import UserSchema from './UserSchema';
 
+// TODO Modify search params for pagination
 const USERS = gql`
-  query GetUsers($login: String!) {
-    user(login: $login) {
-      login
-      name
-      avatarUrl
-      bio
+  query GetUsers($userQuery: String!) {
+    search(query: $userQuery, type: USER, first: 10) {
+      userCount
+      edges {
+        node {
+          ... on User {
+            login
+            name
+            avatarUrl
+            bio
+          }
+        }
+      }
     }
   }
 `;
 
 const App = () => {
   const [userQuery, setUserQuery] = useState('');
-  const [users, setUsers] = useState([]);
+  const [userCount, setUserCount] = useState(0);
+  const [usersPage, setUsersPage] = useState([]);
   const [getUsers, { loading, data }] = useLazyQuery(USERS);
 
   useEffect(() => {
     if (data) {
       console.log('got API data:', data);
-      setUsers(data);
+      setUserCount(data.search.userCount);
+      setUsersPage(data.search.edges);
     }
   }, [loading, data]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    getUsers({ variables: { login: userQuery } });
-    console.log('you submitted the form!');
+    getUsers({ variables: { userQuery: userQuery } });
   };
 
   return (
@@ -37,7 +46,7 @@ const App = () => {
       <h1>GitHub User Search</h1>
       <form onSubmit={handleSubmit}>
         <label htmlFor="user-search">
-          Username
+          User
           <input
             type="text"
             name="user-search"
@@ -46,6 +55,7 @@ const App = () => {
             onChange={(event) => {
               setUserQuery(event.target.value);
             }}
+            placeholder="Name, username, bio..."
           />
         </label>
         <button type="submit">Search</button>
@@ -54,23 +64,20 @@ const App = () => {
         <p>Loading users...</p>
       ) : (
         <>
-          <pre>{JSON.stringify(users, null, 2)}</pre>
-
-          {/* TODO Get list of users whose logins include userQuery */}
-          {users.length ? (
+          {userCount !== 0 ? (
+            <p>{userCount} users found</p>
+          ) : (
+            <p>No users to show</p>
+          )}
+          {usersPage.length ? (
             <ul>
-              {users.map((user, i) => (
+              {usersPage.map((user, i) => (
                 <li key={i}>
                   <pre>{JSON.stringify(user, null, 2)}</pre>
                 </li>
               ))}
             </ul>
-          ) : (
-            // <p>No users found</p>
-            <pre>
-              users.length === 0, or users has no property called length
-            </pre>
-          )}
+          ) : null}
         </>
       )}
       {/* <hr />
