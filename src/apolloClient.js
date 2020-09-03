@@ -5,9 +5,7 @@ import {
   ApolloLink,
 } from '@apollo/client';
 
-// TODO Maybe this shouldn't be committed to source control?
-// But it's only allowed to read user profile data + email addresses, so whatever
-const personalAccessToken = 'b7ec5bdbf8b0ed6874d15adc3804d01ba305a7bd';
+const personalAccessToken = process.env.REACT_APP_GITHUB_API_KEY;
 
 // https://risanb.com/code/set-authorization-header-with-apollo-client/
 const httpLink = new HttpLink({ uri: 'https://api.github.com/graphql' });
