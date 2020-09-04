@@ -5,6 +5,10 @@ const USERS = gql`
   query GetUsers($userQuery: String!, $pageLength: Int!, $cursor: String) {
     search(query: $userQuery, type: USER, first: $pageLength, after: $cursor) {
       userCount
+      pageInfo {
+        startCursor
+        endCursor
+      }
       edges {
         node {
           __typename
@@ -61,20 +65,13 @@ const formatDateString = (date) =>
 
 const App = () => {
   const [userQuery, setUserQuery] = useState('');
-  const [resultCount, setResultCount] = useState(0);
-  const [resultPage, setResultPage] = useState([]);
   const [offset, setOffset] = useState(0);
-  // TODO How to synchronize cursor w/offset for Pagination?
-  // setCursor should be called with fetchMore
-  const [cursor, setCursor] = useState(null);
   const [getUsers, { loading, data, error, fetchMore }] = useLazyQuery(USERS);
 
+  // Handle incoming data
   useEffect(() => {
     if (data) {
       console.log('got API data:', data);
-
-      setResultCount(data.search.userCount);
-      setResultPage(data.search.edges);
     }
 
     if (error) {
@@ -89,8 +86,18 @@ const App = () => {
       variables: {
         userQuery: userQuery,
         pageLength: PAGE_LENGTH,
-        cursor: cursor,
       },
+    });
+  };
+
+  // TODO implement getPreviousPage
+
+  const getNextPage = () => {
+    const { endCursor } = data.search.pageInfo;
+
+    fetchMore({
+      variables: { cursor: endCursor },
+      updateQuery: (previousResult, { fetchMoreResult }) => fetchMoreResult,
     });
   };
 
@@ -117,11 +124,18 @@ const App = () => {
         <p>Loading users...</p>
       ) : (
         <>
-          {resultPage.length ? (
+          {data?.search.edges.length ? (
             <>
-              <Pagination {...{ resultCount, offset, setOffset }} />
+              <Pagination
+                {...{
+                  resultCount: data.search.userCount,
+                  offset,
+                  setOffset,
+                  getNextPage,
+                }}
+              />
               <ul>
-                {resultPage.map((result) => (
+                {data.search.edges.map((result) => (
                   <li key={result.node.id}>
                     {result.node.__typename === 'User' ? (
                       <UserListing {...result.node} />
@@ -131,7 +145,14 @@ const App = () => {
                   </li>
                 ))}
               </ul>
-              <Pagination {...{ resultCount, offset, setOffset }} />
+              <Pagination
+                {...{
+                  resultCount: data.search.userCount,
+                  offset,
+                  setOffset,
+                  getNextPage,
+                }}
+              />
             </>
           ) : null}
         </>
@@ -197,7 +218,7 @@ const OrganizationListing = ({
   </a>
 );
 
-const Pagination = ({ resultCount, offset, setOffset }) => {
+const Pagination = ({ resultCount, offset, setOffset, getNextPage }) => {
   const lowerBound = 1 + offset;
   const upperBound = PAGE_LENGTH + offset;
   const canClickPrevious = offset > 0;
@@ -208,7 +229,10 @@ const Pagination = ({ resultCount, offset, setOffset }) => {
   };
 
   const handleClickNext = () => {
-    if (canClickNext) setOffset(offset + PAGE_LENGTH);
+    if (canClickNext) {
+      setOffset(offset + PAGE_LENGTH);
+      getNextPage();
+    }
   };
 
   return (
