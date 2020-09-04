@@ -1,14 +1,23 @@
 import React from 'react';
 import { PAGE_LENGTH } from '../constants';
 
-const Pagination = ({ resultCount, offset, setOffset, getNextPage }) => {
+const Pagination = ({
+  resultCount,
+  offset,
+  setOffset,
+  getPreviousPage,
+  getNextPage,
+}) => {
   const lowerBound = 1 + offset;
   const upperBound = PAGE_LENGTH + offset;
   const canClickPrevious = offset > 0;
   const canClickNext = upperBound < resultCount;
 
   const handleClickPrevious = () => {
-    if (canClickPrevious) setOffset(offset - PAGE_LENGTH);
+    if (canClickPrevious) {
+      setOffset(offset - PAGE_LENGTH);
+      getPreviousPage();
+    }
   };
 
   const handleClickNext = () => {

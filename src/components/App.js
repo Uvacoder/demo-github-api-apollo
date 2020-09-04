@@ -8,8 +8,10 @@ import OrganizationListing from './OrganizationListing';
 
 const App = () => {
   const [userQuery, setUserQuery] = useState('');
-  const [offset, setOffset] = useState(0);
   const [getUsers, { loading, data, error, fetchMore }] = useLazyQuery(USERS);
+  const [offset, setOffset] = useState(0);
+  const [cursor, setCursor] = useState(null);
+  const [previousCursors, setPreviousCursors] = useState([]);
 
   // Handle incoming data
   useEffect(() => {
@@ -33,10 +35,27 @@ const App = () => {
     });
   };
 
-  // TODO implement getPreviousPage
+  const getPreviousPage = () => {
+    const previousCursor = previousCursors.slice(-1)[0];
+
+    // Pop last known cursor off of stack
+    setPreviousCursors(
+      previousCursors.filter((cursor) => cursor !== previousCursor)
+    );
+    setCursor(previousCursor);
+
+    fetchMore({
+      variables: { cursor: previousCursor },
+      updateQuery: (previousResult, { fetchMoreResult }) => fetchMoreResult,
+    });
+  };
 
   const getNextPage = () => {
     const { endCursor } = data.search.pageInfo;
+
+    // Push last known cursor onto stack
+    setPreviousCursors([...previousCursors, cursor]);
+    setCursor(endCursor);
 
     fetchMore({
       variables: { cursor: endCursor },
@@ -74,6 +93,7 @@ const App = () => {
                   resultCount: data.search.userCount,
                   offset,
                   setOffset,
+                  getPreviousPage,
                   getNextPage,
                 }}
               />
@@ -93,6 +113,7 @@ const App = () => {
                   resultCount: data.search.userCount,
                   offset,
                   setOffset,
+                  getPreviousPage,
                   getNextPage,
                 }}
               />
