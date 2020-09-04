@@ -175,7 +175,7 @@ const UserListing = ({
   createdAt,
 }) => (
   <a
-    href={`https://api.github.com/search/users/${login}`}
+    href={`https://api.github.com/users/${login}`}
     target="_blank"
     rel="noopener noreferrer"
   >
@@ -204,7 +204,11 @@ const OrganizationListing = ({
   repositories,
   createdAt,
 }) => (
-  <a href={`https://api.github.com/search/orgs/${login}`}>
+  <a
+    href={`https://api.github.com/orgs/${login}`}
+    target="_blank"
+    rel="noopener noreferrer"
+  >
     <h2>{login}</h2>
     <h3>{name}</h3>
     <h4>Organization</h4>
