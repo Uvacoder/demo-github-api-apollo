@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { ApolloProvider } from '@apollo/client';
 import client from './apolloClient';
-import './index.css';
+import './styles/main.css';
 import App from './components/App';
 
 ReactDOM.render(
