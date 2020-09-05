@@ -67,21 +67,21 @@ const App = () => {
   };
 
   return (
-    <div className="flex flex-col max-w-sm sm:max-w-xl md:max-w-2xl lg:max-w-3xl mx-auto py-5 px-4 max-h-full bg-white rounded-md shadow-xl">
-      <div className="mb-4">
+    <div className="flex flex-col max-w-sm sm:max-w-xl md:max-w-2xl lg:max-w-3xl mx-auto pt-5 max-h-full bg-white rounded-md shadow-xl">
+      <div className="mb-4 px-4">
         <h1 className="text-3xl font-bold">GitHub User Search</h1>
-        <p className="mb-6">
+        <small>
           by{' '}
           <a
             href="https://github.com/dawneraq"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm font-bold underline text-purple-600 hover:text-purple-700"
+            className="font-bold underline text-purple-600 hover:text-purple-700"
           >
             Andrew Aquino
           </a>
-        </p>
-        <form onSubmit={handleSubmit} className="w-full flex">
+        </small>
+        <form onSubmit={handleSubmit} className="w-full flex mt-5">
           <input
             type="text"
             name="user-search"
@@ -103,24 +103,26 @@ const App = () => {
         </form>
       </div>
       {loading ? (
-        <p>Loading users...</p>
+        <p className="px-4 pb-5">Loading users...</p>
       ) : formDidSubmit ? (
         data?.search.edges.length ? (
-          <Pagination
-            {...{
-              resultCount: data.search.userCount,
-              offset,
-              setOffset,
-              getPreviousPage,
-              getNextPage,
-            }}
-          />
+          <div className="px-4">
+            <Pagination
+              {...{
+                resultCount: data.search.userCount,
+                offset,
+                setOffset,
+                getPreviousPage,
+                getNextPage,
+              }}
+            />
+          </div>
         ) : (
-          <p>No users to show.</p>
+          <p className="px-4 pb-5">No users to show.</p>
         )
       ) : null}
-      <div className="flex-1 overflow-auto">
-        {!loading && data?.search.edges.length ? (
+      {!loading && data?.search.edges.length ? (
+        <div className="flex-1 overflow-auto p-4 border-t rounded-b bg-gray-100">
           <ul>
             {data.search.edges.map((result) => (
               <li key={result.node.id}>
@@ -132,8 +134,8 @@ const App = () => {
               </li>
             ))}
           </ul>
-        ) : null}
-      </div>
+        </div>
+      ) : null}
     </div>
   );
 };

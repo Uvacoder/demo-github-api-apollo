@@ -38,7 +38,7 @@ const Pagination = ({
         found.
       </p>
       {resultCount > PAGE_LENGTH && (
-        <div className="mb-2">
+        <div className="mb-4">
           <button
             onClick={handleClickPrevious}
             disabled={!canClickPrevious}
