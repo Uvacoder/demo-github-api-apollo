@@ -17,7 +17,7 @@ const OrganizationListing = ({
     target="_blank"
     rel="noopener noreferrer"
   >
-    <div className="mb-4 pt-4 pb-3 border rounded shadow-md bg-white">
+    <div className="mb-4 pt-4 pb-3 border rounded shadow-md bg-white transition-shadow duration-200 hover:shadow-lg">
       <div className="flex flex-col sm:flex-row justify-between mb-3 sm:mb-0">
         {/* Details */}
         <div className="sm:w-1/2 mb-3 sm:border-r px-3">
