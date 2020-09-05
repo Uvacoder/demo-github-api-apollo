@@ -7,15 +7,17 @@ const OrganizationListing = ({
   avatarUrl,
   description,
   location,
+  membersWithRole,
   repositories,
   createdAt,
 }) => (
+  // TODO Consolidate this and UserListing into one component
   <a
     href={`https://api.github.com/orgs/${login}`}
     target="_blank"
     rel="noopener noreferrer"
   >
-    <div className="mb-4 pt-4 pb-2 border rounded shadow-md bg-white">
+    <div className="mb-4 pt-4 pb-3 border rounded shadow-md bg-white">
       <div className="flex flex-col sm:flex-row justify-between mb-3 sm:mb-0">
         {/* Details */}
         <div className="sm:w-1/2 mb-3 sm:border-r px-3">
@@ -36,8 +38,8 @@ const OrganizationListing = ({
         </div>
         {/* Stats */}
         <div className="sm:w-1/2 flex items-center px-3">
-          <ul>
-            {/* TODO Show membersWithRole */}
+          <ul className="sm:mx-auto">
+            <li>{membersWithRole.totalCount} members</li>
             <li>{repositories.totalCount} repositories</li>
           </ul>
         </div>

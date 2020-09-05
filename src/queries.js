@@ -42,6 +42,9 @@ export const USERS = gql`
             avatarUrl
             description
             location
+            membersWithRole {
+              totalCount
+            }
             repositories {
               totalCount
             }
