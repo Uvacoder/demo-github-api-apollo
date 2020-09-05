@@ -34,7 +34,7 @@ const OrganizationListing = ({
             </div>
           </div>
           <p>{description}</p>
-          {location && <p className="mt-3">Location: {location}</p>}
+          {location && <p className="mt-3 text-sm">Location: {location}</p>}
         </div>
         {/* Stats */}
         <div className="sm:w-1/2 flex items-center px-3">
