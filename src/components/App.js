@@ -122,7 +122,7 @@ const App = () => {
         )
       ) : null}
       {!loading && data?.search.edges.length ? (
-        <div className="flex-1 overflow-auto p-4 border-t rounded-b bg-gray-100">
+        <div className="flex-1 overflow-auto p-4 border-t rounded-b bg-gray-200">
           <ul>
             {data.search.edges.map((result) => (
               <li key={result.node.id}>
