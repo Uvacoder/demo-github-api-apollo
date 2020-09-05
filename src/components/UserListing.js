@@ -21,6 +21,7 @@ const UserListing = ({
   >
     <div className="mb-4 pt-4 pb-2 border rounded shadow-md bg-white">
       <div className="flex flex-col sm:flex-row justify-between mb-3 sm:mb-0">
+        {/* Details */}
         <div className="sm:w-1/2 mb-3 sm:border-r px-3">
           <div className="flex items-center mb-3">
             <img
@@ -37,6 +38,7 @@ const UserListing = ({
           <p>{bio}</p>
           {location && <p className="mt-3">Location: {location}</p>}
         </div>
+        {/* Stats */}
         <div className="sm:w-1/2 flex items-center px-3">
           <ul className="w-1/2">
             <li>{followers.totalCount} followers</li>
