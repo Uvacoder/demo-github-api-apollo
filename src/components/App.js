@@ -64,11 +64,21 @@ const App = () => {
   };
 
   return (
-    <>
-      <h1>GitHub User Search</h1>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="user-search">
-          User
+    <div className="flex flex-col max-w-sm sm:max-w-xl md:max-w-2xl lg:max-w-3xl mx-auto py-5 px-4 max-h-full bg-white rounded-md shadow-xl">
+      <div className="mb-4">
+        <h1 className="text-3xl font-bold">GitHub User Search</h1>
+        <p className="mb-6">
+          by{' '}
+          <a
+            href="https://github.com/dawneraq"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm font-bold underline text-purple-600 hover:text-purple-700"
+          >
+            Andrew Aquino
+          </a>
+        </p>
+        <form onSubmit={handleSubmit} className="w-full flex">
           <input
             type="text"
             name="user-search"
@@ -78,50 +88,59 @@ const App = () => {
               setUserQuery(event.target.value);
             }}
             placeholder="Name, username, bio..."
+            aria-label="Search Users"
+            className="flex-1 py-2 px-3 border rounded-l focus:rounded-l"
           />
-        </label>
-        <button type="submit">Search</button>
-      </form>
-      {loading ? (
-        <p>Loading users...</p>
-      ) : (
-        <>
-          {data?.search.edges.length ? (
-            <>
-              <Pagination
-                {...{
-                  resultCount: data.search.userCount,
-                  offset,
-                  setOffset,
-                  getPreviousPage,
-                  getNextPage,
-                }}
-              />
-              <ul>
-                {data.search.edges.map((result) => (
-                  <li key={result.node.id}>
-                    {result.node.__typename === 'User' ? (
-                      <UserListing {...result.node} />
-                    ) : (
-                      <OrganizationListing {...result.node} />
-                    )}
-                  </li>
-                ))}
-              </ul>
-              <Pagination
-                {...{
-                  resultCount: data.search.userCount,
-                  offset,
-                  setOffset,
-                  getPreviousPage,
-                  getNextPage,
-                }}
-              />
-            </>
-          ) : null}
-        </>
-      )}
-    </>
+          <button
+            type="submit"
+            className="py-2 px-3 rounded-r bg-purple-600 hover:bg-purple-700 text-white"
+          >
+            Search
+          </button>
+        </form>
+      </div>
+      <div className="flex-1 overflow-auto">
+        {loading ? (
+          <p>Loading users...</p>
+        ) : (
+          <>
+            {data?.search.edges.length ? (
+              <>
+                <Pagination
+                  {...{
+                    resultCount: data.search.userCount,
+                    offset,
+                    setOffset,
+                    getPreviousPage,
+                    getNextPage,
+                  }}
+                />
+                <ul>
+                  {data.search.edges.map((result) => (
+                    <li key={result.node.id}>
+                      {result.node.__typename === 'User' ? (
+                        <UserListing {...result.node} />
+                      ) : (
+                        <OrganizationListing {...result.node} />
+                      )}
+                    </li>
+                  ))}
+                </ul>
+                <Pagination
+                  {...{
+                    resultCount: data.search.userCount,
+                    offset,
+                    setOffset,
+                    getPreviousPage,
+                    getNextPage,
+                  }}
+                />
+              </>
+            ) : null}
+          </>
+        )}
+      </div>
+    </div>
   );
 };
 
