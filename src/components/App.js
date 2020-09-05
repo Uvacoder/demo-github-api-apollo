@@ -7,6 +7,7 @@ import UserListing from './UserListing';
 import OrganizationListing from './OrganizationListing';
 
 const App = () => {
+  const [formDidSubmit, setFormDidSubmit] = useState(false);
   const [userQuery, setUserQuery] = useState('');
   const [getUsers, { loading, data, error, fetchMore }] = useLazyQuery(USERS);
   const [offset, setOffset] = useState(0);
@@ -33,6 +34,8 @@ const App = () => {
         pageLength: PAGE_LENGTH,
       },
     });
+
+    setFormDidSubmit(true);
   };
 
   const getPreviousPage = () => {
@@ -99,46 +102,37 @@ const App = () => {
           </button>
         </form>
       </div>
-      <div className="flex-1 overflow-auto">
-        {loading ? (
-          <p>Loading users...</p>
+      {loading ? (
+        <p>Loading users...</p>
+      ) : formDidSubmit ? (
+        data?.search.edges.length ? (
+          <Pagination
+            {...{
+              resultCount: data.search.userCount,
+              offset,
+              setOffset,
+              getPreviousPage,
+              getNextPage,
+            }}
+          />
         ) : (
-          <>
-            {data?.search.edges.length ? (
-              <>
-                <Pagination
-                  {...{
-                    resultCount: data.search.userCount,
-                    offset,
-                    setOffset,
-                    getPreviousPage,
-                    getNextPage,
-                  }}
-                />
-                <ul>
-                  {data.search.edges.map((result) => (
-                    <li key={result.node.id}>
-                      {result.node.__typename === 'User' ? (
-                        <UserListing {...result.node} />
-                      ) : (
-                        <OrganizationListing {...result.node} />
-                      )}
-                    </li>
-                  ))}
-                </ul>
-                <Pagination
-                  {...{
-                    resultCount: data.search.userCount,
-                    offset,
-                    setOffset,
-                    getPreviousPage,
-                    getNextPage,
-                  }}
-                />
-              </>
-            ) : null}
-          </>
-        )}
+          <p>No users to show.</p>
+        )
+      ) : null}
+      <div className="flex-1 overflow-auto">
+        {!loading && data?.search.edges.length ? (
+          <ul>
+            {data.search.edges.map((result) => (
+              <li key={result.node.id}>
+                {result.node.__typename === 'User' ? (
+                  <UserListing {...result.node} />
+                ) : (
+                  <OrganizationListing {...result.node} />
+                )}
+              </li>
+            ))}
+          </ul>
+        ) : null}
       </div>
     </div>
   );

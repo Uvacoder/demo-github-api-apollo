@@ -29,20 +29,16 @@ const Pagination = ({
 
   return (
     <>
-      {resultCount !== 0 ? (
-        <p className="mb-2">
-          Showing{' '}
-          <strong>
-            {lowerBound} - {canClickNext ? upperBound : resultCount}
-          </strong>{' '}
-          of <strong>{resultCount}</strong> user{resultCount > 1 ? 's' : null}{' '}
-          found
-        </p>
-      ) : (
-        <p>No users to show</p>
-      )}
+      <p className="mb-2">
+        Showing{' '}
+        <strong>
+          {lowerBound} - {canClickNext ? upperBound : resultCount}
+        </strong>{' '}
+        of <strong>{resultCount}</strong> user{resultCount > 1 ? 's' : null}{' '}
+        found.
+      </p>
       {resultCount > PAGE_LENGTH && (
-        <>
+        <div className="mb-2">
           <button
             onClick={handleClickPrevious}
             disabled={!canClickPrevious}
@@ -57,7 +53,7 @@ const Pagination = ({
           >
             Next
           </button>
-        </>
+        </div>
       )}
     </>
   );
